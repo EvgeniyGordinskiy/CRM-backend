@@ -42,7 +42,7 @@ Route::group([
     'as' => 'users.',
     'prefix' => 'users',
     'middleware' => [
-        'jwt.auth', 'auth.admin'
+        'jwt.auth'
     ],
 ], function () {
     Route::get('', ['as' => 'index', 'uses' => 'Account\UserController@index']);

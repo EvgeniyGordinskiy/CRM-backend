@@ -74,6 +74,9 @@ class AuthController extends BaseController
         $credentials = $request->only('email', 'password');
         $token = JWTAuth::attempt($credentials);
 
+        $app = app();
+        $routes = $app->routes->getRoutes();
+
         return $this->respond(compact('token'));
     }
 

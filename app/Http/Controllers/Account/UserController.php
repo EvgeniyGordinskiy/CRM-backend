@@ -12,6 +12,8 @@ use App\Transformers\UserTransformer;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\BaseController;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends BaseController
 {
@@ -36,18 +38,24 @@ class UserController extends BaseController
     public function index(Request $request)
     {
         $users =  new User;
-
-        return response()->json($request->route());
-
+        $app = app();
+        $routes = array_filter(array_map(function($route){
+            if(isset($route->action['as'])) {
+              return $route->action['as'];
+            }
+            return false;
+        }
+        , $app->routes->getRoutes()));
+        return response()->json($routes);
         if(!$request->has('limit')){
             return $this->respondWithData($this->transformer->transformCollection($users::all()));
         }
         $this->setPagination($request->get('limit'));
         $pagination = $users->paginate($this->getPagination());
 
-       // $users = $this->transformer->transformCollection($pagination->items());
+        $users = $this->transformer->transformCollection($pagination->items());
 
-     //   return $this->respondWithPagination($pagination, $users);
+        return $this->respondWithPagination($pagination, $users);
     }
 
     /**
