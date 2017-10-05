@@ -30,7 +30,7 @@ Route::group([
     'as' => 'account.',
     'prefix' => 'account',
     'middleware' => [
-        'jwt.auth',
+        'jwt.auth'
     ],
 ], function () {
     Route::get('', ['as' => 'show', 'uses' => 'Account\AccountController@show']);
@@ -41,9 +41,7 @@ Route::group([
 Route::group([
     'as' => 'users.',
     'prefix' => 'users',
-    'middleware' => [
-        'jwt.auth'
-    ],
+    'middleware' => ['jwt.auth', 'jwt.subscribe'],
 ], function () {
     Route::get('', ['as' => 'index', 'uses' => 'Account\UserController@index']);
     Route::get('{user}', ['as' => 'show', 'uses' => 'Account\UserController@show']);

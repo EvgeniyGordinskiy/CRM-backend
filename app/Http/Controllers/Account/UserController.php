@@ -7,6 +7,7 @@ use App\Http\Requests\User\IndexRequest;
 use App\Http\Requests\User\ShowRequest;
 use App\Http\Requests\User\StoreRequest;
 use App\Http\Requests\User\UpdateRequest;
+use App\Models\Permission;
 use App\Models\User;
 use App\Transformers\UserTransformer;
 use Illuminate\Http\JsonResponse;
@@ -38,15 +39,7 @@ class UserController extends BaseController
     public function index(Request $request)
     {
         $users =  new User;
-        $app = app();
-        $routes = array_filter(array_map(function($route){
-            if(isset($route->action['as'])) {
-              return $route->action['as'];
-            }
-            return false;
-        }
-        , $app->routes->getRoutes()));
-        return response()->json($routes);
+
         if(!$request->has('limit')){
             return $this->respondWithData($this->transformer->transformCollection($users::all()));
         }
