@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -12,13 +13,12 @@ use Hash;
 
 class AuthController extends BaseController
 {
-    /**
-     * This action will be fired when the user tries to authenticate.
-     *
-     * @param AuthenticateRequest $request The request for authentication.
-     *
-     * @return JsonResponse The token in a JSON format.
-     */
+	/**
+	 * This action will be fired when the user tries to authenticate.
+	 *
+	 * @param AuthenticateRequest $request
+	 * @return \Illuminate\Http\JsonResponse
+	 */
     public function authenticate(AuthenticateRequest $request)
     {
 
@@ -27,7 +27,6 @@ class AuthController extends BaseController
         if (!$token) {
             return $this->respondUnauthorized('Invalid credentials', 40101);
         }
-
         return $this->respond(compact('token'));
     }
 
@@ -36,7 +35,7 @@ class AuthController extends BaseController
      * Return the credential that are mandatory.
      *
      * @param  AuthenticateRequest $request The request for authentication.
-     * @return Array The credentials.
+     * @return array The credentials.
      */
     public function getCredentials(AuthenticateRequest $request)
     {
@@ -54,7 +53,7 @@ class AuthController extends BaseController
      *
      * @return JsonResponse The JSON response if the user was registered.
      */
-    public function register(RegisterRequest $request)
+    public function register(RegisterRequest $request) : JsonResponse
     {
         $user = new User($request->only(
             [
@@ -72,6 +71,7 @@ class AuthController extends BaseController
         $user->save();
 
         $credentials = $request->only('email', 'password');
+
         $token = JWTAuth::attempt($credentials);
 
         return $this->respond(compact('token'));

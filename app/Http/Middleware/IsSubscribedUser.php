@@ -18,9 +18,9 @@ class IsSubscribedUser extends VerifyJWTToken
         $result = parent::handle($request, $next);
         $token = $this->auth->setRequest($request)->getToken();
         $user = $this->auth->authenticate($token);
-        $curretnRoute = $request->route()->getName();
-        $userPermissions = $user->userPermissions()->get()->contains(function ($item) use ($curretnRoute) {
-            return $item->name === $curretnRoute;
+        $currentRoute = $request->route()->getName();
+        $userPermissions = $user->userPermissions()->get()->contains(function ($item) use ($currentRoute) {
+            return $item->name === $currentRoute;
         });
 
         if ($userPermissions){

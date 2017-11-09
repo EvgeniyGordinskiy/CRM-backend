@@ -5,6 +5,8 @@ namespace App\Http\Middleware;
 use Closure;
 use Tymon\JWTAuth\Http\Middleware\Authenticate;
 use App\Traits\Restable;
+use Auth;
+use Response;
 
 class VerifyJWTToken extends Authenticate
 {
@@ -20,6 +22,16 @@ class VerifyJWTToken extends Authenticate
     public function handle($request, Closure $next)
     {
         $result = parent::handle($request, $next);
-        return $result;
+	    $token = $this->auth->setRequest($request)->getToken();
+	    $user = $this->auth->authenticate($token);
+
+	    if (!$user) {
+		    return $this->respondUnauthorized(
+			    'Email not verified',
+			    40113
+		    );
+	    }
+
+	    return $result;
     }
 }
