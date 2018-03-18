@@ -14,11 +14,6 @@ abstract class BaseController extends Controller
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests, Restable;
 
     /**
-     * @var \App\Transformers\BaseTransformer The transformer used to transform an item.
-     */
-    protected $transformer;
-
-    /**
      * @var int The default pagination size.
      */
     protected $pagination = 5;

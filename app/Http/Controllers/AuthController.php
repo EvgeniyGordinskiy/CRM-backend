@@ -17,11 +17,18 @@ class AuthController extends BaseController
 	 * This action will be fired when the user tries to authenticate.
 	 *
 	 * @param AuthenticateRequest $request
+     * @uses
+     *  Json
+     *    email: string, valid email of the user,
+     *    password: string, password of thr user
 	 * @return \Illuminate\Http\JsonResponse
+     *   Response body     
+     *     {
+     *       token: $token
+     *     }
 	 */
     public function authenticate(AuthenticateRequest $request)
     {
-
         $token = JWTAuth::attempt($this->getCredentials($request));
 
         if (!$token) {
@@ -30,28 +37,23 @@ class AuthController extends BaseController
         return $this->respond(compact('token'));
     }
 
-
-    /**
-     * Return the credential that are mandatory.
-     *
-     * @param  AuthenticateRequest $request The request for authentication.
-     * @return array The credentials.
-     */
-    public function getCredentials(AuthenticateRequest $request)
-    {
-        return [
-            'email' => $request->input('email'),
-            'password' => $request->input('password'),
-        ];
-    }
-
-
     /**
      * The action to register a user.
      *
      * @param RegisterRequest $request The incoming request with data.
+     * @uses
+     *  Json
+     *    first_name: string, required, first name of the user,
+     *    last_name: string, required, last name of the user,
+     *    timeZone: string, required, current users time Zone,
+     *    email: string, required, valid suers email,
+     *    password: string, required, users password.
      *
      * @return JsonResponse The JSON response if the user was registered.
+     *   Response body
+     *     {
+     *       token: $token
+     *     }
      */
     public function register(RegisterRequest $request) : JsonResponse
     {
@@ -77,4 +79,17 @@ class AuthController extends BaseController
         return $this->respond(compact('token'));
     }
 
+    /**
+     * Return the credential that are mandatory.
+     *
+     * @param  AuthenticateRequest $request The request for authentication.
+     * @return array The credentials.
+     */
+    private function getCredentials(AuthenticateRequest $request)
+    {
+        return [
+            'email' => $request->input('email'),
+            'password' => $request->input('password'),
+        ];
+    }
 }

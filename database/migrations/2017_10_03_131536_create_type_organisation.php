@@ -13,7 +13,7 @@ class CreateTypeOrganisation extends Migration
      */
     public function up()
     {
-        Schema::create('organisation_type', function (Blueprint $table) {
+        Schema::create('type_organisations', function (Blueprint $table) {
            $table->increments('id');
            $table->string('name');
            $table->timestamps();
@@ -27,6 +27,6 @@ class CreateTypeOrganisation extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('organisation_type');
+        Schema::dropIfExists('type_organisations');
     }
 }

@@ -20,8 +20,6 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('token');
             $table->string('timeZone');
-            $table->integer('role_id')->unsigned()->nullable();
-            $table->foreign('role_id')->references('id')->on('roles')->onDelete('set null');
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
@@ -35,9 +33,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['role_id']);
-        });
         Schema::dropIfExists('users');
     }
 }

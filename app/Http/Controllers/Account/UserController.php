@@ -20,16 +20,6 @@ class UserController extends BaseController
 {
 
     /**
-     * The constructor for ClientController.
-     *
-     * @param UserTransformer $transformer Used to transform the client to a more suitable format.
-     */
-    public function __construct(UserTransformer $transformer)
-    {
-        $this->transformer = $transformer;
-    }
-
-    /**
      * The action to get all the clients and paginate the request.
      *
      * @param IndexRequest $request The incoming request.

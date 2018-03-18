@@ -17,7 +17,7 @@ class CreateOrganisationInformationsTable extends Migration
            $table->increments('id');
            $table->string('description');
            $table->integer('organisation_type_id')->unsigned()->nullable();
-           $table->foreign('organisation_type_id')->references('id')->on('organisation_type')->onDelete('set null');
+           $table->foreign('organisation_type_id')->references('id')->on('type_organisations')->onDelete('set null');
            $table->timestamps();
         });
     }
