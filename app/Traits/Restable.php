@@ -205,8 +205,7 @@ trait Restable
             [
                 'error' => [
                     'message' => $message,
-                    'code' => $code,
-                    'status_code' => $this->getStatusCode()
+                    'status_code' => $code
                 ]
             ],
             $headers

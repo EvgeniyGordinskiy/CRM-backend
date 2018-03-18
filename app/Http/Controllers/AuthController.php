@@ -18,9 +18,12 @@ class AuthController extends BaseController
 	 *
 	 * @param AuthenticateRequest $request
      * @uses
-     *  Json
-     *    email: string, valid email of the user,
-     *    password: string, password of thr user
+     *  POST auth/
+     *              {
+     *              email: string, valid email of the user,
+     *              password: string, password of thr user
+     *              }
+     *
 	 * @return \Illuminate\Http\JsonResponse
      *   Response body     
      *     {
@@ -42,12 +45,15 @@ class AuthController extends BaseController
      *
      * @param RegisterRequest $request The incoming request with data.
      * @uses
-     *  Json
-     *    first_name: string, required, first name of the user,
-     *    last_name: string, required, last name of the user,
-     *    timeZone: string, required, current users time Zone,
-     *    email: string, required, valid suers email,
-     *    password: string, required, users password.
+     *  auth/register 
+     *             {
+     *              first_name: string, required, first name of the user,
+     *              last_name: string, required, last name of the user,
+     *              timeZone: string, required, current users time Zone,
+     *              email: string, required, valid suers email,
+     *              password: string, required, users password.
+     *              confirm_password: string, required.
+     *             }
      *
      * @return JsonResponse The JSON response if the user was registered.
      *   Response body
@@ -55,7 +61,7 @@ class AuthController extends BaseController
      *       token: $token
      *     }
      */
-    public function register(RegisterRequest $request) : JsonResponse
+    public function register(RegisterRequest $request)
     {
         $user = new User($request->only(
             [

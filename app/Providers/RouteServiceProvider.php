@@ -67,6 +67,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::group(
             [
+                'prefix' => 'api/v1',
                 'middleware' => [
                     'api',
                     'cors'

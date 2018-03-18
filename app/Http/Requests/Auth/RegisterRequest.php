@@ -9,7 +9,7 @@ class RegisterRequest extends BaseRequest
     /**
      * Determine if the user is authorized to make this request.
      *
-     * @return bool If the user is authorized to make this request.
+     * @return bool
      */
     public function authorize()
     {
@@ -24,27 +24,20 @@ class RegisterRequest extends BaseRequest
     public function rules()
     {
         return [
-            'first_name' => [
-                'required',
-                'string',
-            ],
-            'last_name' => [
-                'required',
-                'string',
-            ],
-            'email' => [
-                'unique:users',
-                'required',
-                'email',
-            ],
-            'timeZone' => [
-                'required',
-                'string',
-            ],
-            'password' => [
-                'required',
-                'confirmed',
-            ],
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'email' => 'unique:users|required|email',
+            'timeZone' => 'required|string',
+            'password' => 'required|confirmed',
         ];
+    }
+
+    public function messages()
+    {
+        $messages = [
+            'email.required' => 'The :attribute field is required.',
+        ];
+
+        return $messages;
     }
 }

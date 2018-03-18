@@ -2,12 +2,14 @@
 
 namespace App\Exceptions;
 
+use App\Traits\Restable;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
+    use Restable;
     /**
      * A list of the exception types that should not be reported.
      *
@@ -20,6 +22,16 @@ class Handler extends ExceptionHandler
         \Illuminate\Database\Eloquent\ModelNotFoundException::class,
         \Illuminate\Session\TokenMismatchException::class,
         \Illuminate\Validation\ValidationException::class,
+    ];
+
+    /**
+     * A list of the inputs that are never flashed for validation exceptions.
+     *
+     * @var array
+     */
+    protected $dontFlash = [
+        'password',
+        'password_confirmation',
     ];
 
     /**
@@ -44,7 +56,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        return parent::render($request, $exception);
+        return $this->respondWithError($exception->getMessage().' '.$exception->getLine().' '.$exception->getFile(),$exception->getCode());
     }
 
     /**

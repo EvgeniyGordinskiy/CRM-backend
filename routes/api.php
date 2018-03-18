@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Auth::routes();
 
 Route::get('auth/confirm/{token}', ['as' => 'auth.confirm', 'uses' => 'AuthController@confirmEmail']);
 Route::post('auth', ['as' => 'auth.authenticate', 'uses' => 'AuthController@authenticate']);
