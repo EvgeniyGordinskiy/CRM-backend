@@ -50,7 +50,6 @@ class DatabaseSeeder extends Seeder
         $faker = Faker\Factory::create();
         
         factory(App\Models\User::class, 5)->create();
-        factory(App\Models\Role::class, 3)->create();
         factory(App\Models\City::class, 5)->create();
         factory(App\Models\Country::class, 5)->create();
         factory(App\Models\Organisation::class, 5)->create();

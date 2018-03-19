@@ -85,6 +85,11 @@ class AuthController extends BaseController
         return $this->respond(compact('token'));
     }
 
+    public function confirmEmail(string $token)
+    {
+
+    }
+
     /**
      * Return the credential that are mandatory.
      *
