@@ -12,13 +12,26 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Auth::routes();
 
-Route::get('auth/confirm/{token}', ['as' => 'auth.confirm', 'uses' => 'AuthController@confirmEmail']);
-Route::post('auth', ['as' => 'auth.authenticate', 'uses' => 'AuthController@authenticate']);
-Route::post('auth/register', ['as' => 'auth.register', 'uses' => 'AuthController@register']);
-Route::post('auth/reset_password', ['as' => 'auth.resetPassword', 'uses' => 'AuthController@resetPassword']);
-Route::get('auth/change_password/{token}', ['as' => 'auth.changePassword', 'uses' => 'AuthController@changePassword']);
+Route::group([
+    'prefix' => 'auth'
+], function(){
+    Route::post('', ['as' => '', 'uses' => 'AuthController@authenticate']);
+    Route::post('register', ['as' => 'register', 'uses' => 'AuthController@register']);
+    Route::post('reset_password', ['as' => 'resetPassword', 'uses' => 'AuthController@resetPassword']);
+    Route::get('change_password/{token}', ['as' => 'changePassword', 'uses' => 'AuthController@changePassword']);
+});
+Route::group([
+    'prefix' => 'confirm'
+], function(){
+    Route::group([
+     'prefix' => 'email'   
+    ],function(){
+        Route::get('{token}', ['as' => 'email', 'uses' => 'EmailConfirmationController@confirm']);
+        Route::get('send', ['as' => 'email.send', 'uses' => 'EmailConfirmationController@send']); 
+    });
+});
+
 
 // Refresh token route
 Route::get('refresh_token', [
