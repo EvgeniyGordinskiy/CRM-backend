@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\EmailConfirmation;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -52,5 +53,15 @@ class User extends Authenticatable implements JWTSubject
     public function userPermissions()
     {
         return $this->belongsToMany(Permission::class, 'users_permissions');
+    }
+    
+    public function emailVerifications()
+    {
+        $this->hasOne(EmailConfirmation::class);
+    }
+    
+    public function getTokenProperty()
+    {
+        return $this->emailVerifications()->token;
     }
 }

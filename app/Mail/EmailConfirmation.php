@@ -12,10 +12,11 @@ class EmailConfirmation extends Mailable
     use Queueable, SerializesModels;
 
     private $user;
+
     /**
-     * Create a new message instance.
-     *
-     * @return void
+     * EmailConfirmation constructor.
+     * @param \App\Models\User $user
+     * @param string $token
      */
     public function __construct(\App\Models\User $user)
     {
@@ -29,8 +30,11 @@ class EmailConfirmation extends Mailable
      */
     public function build()
     {
+        $url = route('confirm.email.confirm', ['token' => $this->user->token]);
         return $this
             ->to($this->user->email)
-            ->markdown('emails.confirmation');
+            ->markdown('emails.confirmation')
+            ->with(['url' => $url]);
     }
+
 }
