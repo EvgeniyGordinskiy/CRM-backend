@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Services\Permission;
+namespace App\Services\Verification;
 
 use App\Mail\EmailConfirmation;
 use Illuminate\Support\Facades\Mail;

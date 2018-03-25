@@ -1,8 +1,7 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use app\Services\Permission\EmailVerificationService;
+use App\Services\Verification\EmailVerificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,9 +13,10 @@ class EmailConfirmationController extends Controller
     {
         $this->service = $emailVerificationService;
     }
-    
+
     public function send()
     {
+        
         $this->service->sendVerifyEmail(Auth::user());
     }
 

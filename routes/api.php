@@ -21,14 +21,19 @@ Route::group([
     Route::post('reset_password', ['as' => 'resetPassword', 'uses' => 'AuthController@resetPassword']);
     Route::get('change_password/{token}', ['as' => 'changePassword', 'uses' => 'AuthController@changePassword']);
 });
+//Route::get('/confirm/email/send', ['as' => 'email.send', 'uses' => 'EmailConfirmationController@send']);
+
 Route::group([
-    'prefix' => 'confirm'
+    'as' => 'confirm.',
+    'prefix' => 'confirm',
 ], function(){
+
     Route::group([
-     'prefix' => 'email'   
+        'as' => 'email.',
+        'prefix' => 'email',
     ],function(){
-        Route::get('{token}', ['as' => 'email', 'uses' => 'EmailConfirmationController@confirm']);
-        Route::get('send', ['as' => 'email.send', 'uses' => 'EmailConfirmationController@send']); 
+        Route::get('send', ['as' => 'send', 'uses' => 'EmailConfirmationController@send'])->middleware('jwt.auth');
+        Route::get('{token}', ['as' => 'confirm', 'uses' => 'EmailConfirmationController@confirm']);
     });
 });
 
@@ -57,9 +62,9 @@ Route::group([
     'prefix' => 'users',
     'middleware' => ['jwt.auth', 'jwt.subscribe'],
 ], function () {
-    Route::get('', ['as' => 'index', 'uses' => 'Account\UserController@index']);
-    Route::get('{user}', ['as' => 'show', 'uses' => 'Account\UserController@show']);
-    Route::post('', ['as' => 'store', 'uses' => 'Account\UserController@store']);
-    Route::post('{user}', ['as' => 'update', 'uses' => 'Account\UserController@update']);
-    Route::delete('{user}', ['as' => 'destroy', 'uses' => 'Account\UserController@destroy']);
+    Route::get('', ['as' => 'index', 'uses' => 'UserController@index']);
+    Route::get('{user}', ['as' => 'show', 'uses' => 'UserController@show']);
+    Route::post('', ['as' => 'store', 'uses' => 'UserController@store']);
+    Route::post('{user}', ['as' => 'update', 'uses' => 'UserController@update']);
+    Route::delete('{user}', ['as' => 'destroy', 'uses' => 'UserController@destroy']);
 });

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Account;
+namespace App\Http\Controllers;
 
 use App\Http\Requests\User\DestroyRequest;
 use App\Http\Requests\User\IndexRequest;
