@@ -15,7 +15,7 @@ class CreateTableOrders extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
            $table->increments('id');
-           $table->integer('client_id');
+           $table->integer('client_id')->unsigned();
            $table->foreign('client_id')->references('id')->on('clients');
            $table->float('amount');
         });

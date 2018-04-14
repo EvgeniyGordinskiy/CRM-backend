@@ -24,13 +24,12 @@ class ClientController extends BaseController
         $clients =  new Client();
 
         if(!$request->has('limit')){
-            return $this->respondWithData($this->transformer->transformCollection($clients::all()));
+            return $this->respondWithData($clients::all()->toArray());
         }
         
         $this->setPagination($request->get('limit'));
         $pagination = $clients->paginate($this->getPagination());
-
-        $clients = $this->transformer->transformCollection($pagination->items());
+        $clients = $pagination->items();
 
         return $this->respondWithPagination($pagination, $clients);
     }

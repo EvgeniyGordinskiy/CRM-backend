@@ -56,15 +56,34 @@ Route::group([
 
 });
 
-// Users
-Route::group([
-    'as' => 'users.',
-    'prefix' => 'users',
-    'middleware' => ['jwt.auth', 'jwt.subscribe'],
-], function () {
-    Route::get('', ['as' => 'index', 'uses' => 'UserController@index']);
-    Route::get('{user}', ['as' => 'show', 'uses' => 'UserController@show']);
-    Route::post('', ['as' => 'store', 'uses' => 'UserController@store']);
-    Route::post('{user}', ['as' => 'update', 'uses' => 'UserController@update']);
-    Route::delete('{user}', ['as' => 'destroy', 'uses' => 'UserController@destroy']);
+//Authenticate routes
+Route::group(['middleware' => ['jwt.auth']], function () {
+    // Clients
+    Route::group([
+        'as' => 'clients.',
+        'prefix' => 'clients',
+    ], function () {
+        Route::get('', ['as' => 'index', 'uses' => 'ClientController@index']);
+        Route::get('{user}', ['as' => 'show', 'uses' => 'ClientController@show']);
+        Route::group(['middleware' => ['jwt.subscribe']], function () {
+            Route::post('', ['as' => 'store', 'uses' => 'ClientController@store']);
+            Route::post('{user}', ['as' => 'update', 'uses' => 'ClientController@update']);
+            Route::delete('{user}', ['as' => 'destroy', 'uses' => 'ClientController@destroy']);
+        });
+    });
+
+    // Users
+    Route::group([
+        'as' => 'users.',
+        'prefix' => 'users',
+        'middleware' => ['jwt.auth', 'jwt.subscribe'],
+    ], function () {
+        Route::get('', ['as' => 'index', 'uses' => 'UserController@index']);
+        Route::get('{user}', ['as' => 'show', 'uses' => 'UserController@show']);
+        Route::group(['middleware' => ['jwt.subscribe']], function () {
+            Route::post('', ['as' => 'store', 'uses' => 'UserController@store']);
+            Route::post('{user}', ['as' => 'update', 'uses' => 'UserController@update']);
+            Route::delete('{user}', ['as' => 'destroy', 'uses' => 'UserController@destroy']);
+        });
+    });
 });
