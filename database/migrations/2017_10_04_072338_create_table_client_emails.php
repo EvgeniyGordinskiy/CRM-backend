@@ -19,6 +19,7 @@ class CreateTableClientEmails extends Migration
            $table->foreign('email_id')->references('id')->on('emails')->onDelete('cascade');
            $table->integer('client_id')->unsigned();
            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
+           $table->primary(['email_id', 'client_id']);
            $table->timestamps();
         });
     }

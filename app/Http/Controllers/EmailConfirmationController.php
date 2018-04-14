@@ -19,7 +19,6 @@ class EmailConfirmationController extends Controller
 
     public function send()
     {
-        
         $this->service->sendVerifyEmail(Auth::user());
     }
 
