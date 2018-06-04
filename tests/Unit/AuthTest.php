@@ -22,7 +22,7 @@ class AuthTest extends TestCase
         
         $playload = [
             'email' => $user->email,
-            'password' => 'secre'
+            'password' => 'secret'
         ];
         $this
             ->actingAs($user)
