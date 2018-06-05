@@ -14,12 +14,10 @@ class CreateTableClientEmails extends Migration
     public function up()
     {
         Schema::create('client_emails', function (Blueprint $table) {
-           $table->increments('id');
            $table->integer('email_id')->unsigned();
            $table->foreign('email_id')->references('id')->on('emails')->onDelete('cascade');
            $table->integer('client_id')->unsigned();
            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
-           $table->primary(['email_id', 'client_id']);
            $table->timestamps();
         });
     }

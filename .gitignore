@@ -1,4 +1,5 @@
-
-vendor/**
-.idea/**
+vendor/
+package-lock.json
+.idea
+storage/
 .env
