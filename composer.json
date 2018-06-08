@@ -5,26 +5,27 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=5.6.4",
+        "php": ">=7",
+        "aloha/twilio": "3.0.1",
+        "barryvdh/laravel-cors": "^0.11.0",
+        "barryvdh/laravel-debugbar": "^2.3",
+        "barryvdh/laravel-snappy": "^0.4.1",
+        "caouecs/laravel-lang": "~3.0",
+        "doctrine/dbal": "^2.5",
+        "fideloper/proxy": "~3.3",
+        "guzzlehttp/guzzle": "^6.2",
+        "h4cc/wkhtmltopdf-amd64": "0.12.x",
         "laravel/framework": "5.5.*",
         "laravel/tinker": "~1.0",
-        "tymon/jwt-auth": "~1.0.0-beta.2",
-        "barryvdh/laravel-cors": "^0.8.1",
+        "league/csv": "^8.2",
         "league/flysystem-sftp": "^1.0",
-        "h4cc/wkhtmltopdf-amd64": "0.12.x",
-        "barryvdh/laravel-snappy": "^0.3.3",
-        "guzzlehttp/guzzle": "^6.2",
-        "vinkla/hashids": "^3.1",
-        "aloha/twilio": "3.0.1",
-        "caouecs/laravel-lang": "~3.0",
         "twilio/sdk": "4.12.0",
-        "barryvdh/laravel-debugbar": "^2.3",
-        "doctrine/dbal": "^2.5",
-        "league/csv": "^8.2"
+        "tymon/jwt-auth": "1.0.0.0-RC2",
+        "vinkla/hashids": "^3.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
-        "mockery/mockery": "0.9.*",
+        "mockery/mockery": "~1.0",
         "phpunit/phpunit": "~6.0",
         "filp/whoops": "~2.0"
     },
@@ -55,6 +56,7 @@
     },
     "config": {
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "optimize-autoloader": true
     }
 }
