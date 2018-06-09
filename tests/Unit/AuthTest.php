@@ -71,4 +71,23 @@ class AuthTest extends TestCase
                 'password' =>  ["The password field is required."]
             ]);
     }
+
+    /**
+     *  Test authenticate with empty email.
+     */
+    public function testAuthFailRequiredEmail()
+    {
+        $user = new User(['name' => 'test', 'email' => 'email@email.com']);
+        $playload = [
+            'email' => '',
+            'password' => 'ljll'
+        ];
+        $this
+            ->actingAs($user)
+            ->json('POST', '/api/' . self::API_V1 . '/auth', $playload)
+            ->assertStatus(422)
+            ->assertJson([
+                'email' =>  ["The email field is required."]
+            ]);
+    }
 }
