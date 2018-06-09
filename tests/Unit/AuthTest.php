@@ -34,6 +34,9 @@ class AuthTest extends TestCase
             ]);
     }
 
+    /**
+     *  Test authenticate with min value for password.
+     */
     public function testAuthFailWithInvalidPassword()
     {
         $user = new User(['name' => 'test', 'email' => 'email@email.com']);
@@ -47,6 +50,25 @@ class AuthTest extends TestCase
             ->assertStatus(422)
             ->assertJson([
                 'password' =>  ["The password must be at least 3 characters."]
+            ]);
+    }
+
+    /**
+     *  Test authenticate with empty password.
+     */
+    public function testAuthFailRequiredPassword()
+    {
+        $user = new User(['name' => 'test', 'email' => 'email@email.com']);
+        $playload = [
+            'email' => $user->email,
+            'password' => ''
+        ];
+        $this
+            ->actingAs($user)
+            ->json('POST', '/api/' . self::API_V1 . '/auth', $playload)
+            ->assertStatus(422)
+            ->assertJson([
+                'password' =>  ["The password field is required."]
             ]);
     }
 }
