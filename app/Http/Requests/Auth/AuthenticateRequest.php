@@ -30,6 +30,7 @@ class AuthenticateRequest extends BaseRequest
             ],
             'password' => [
                 'required',
+                'min:3'
             ],
         ];
     }

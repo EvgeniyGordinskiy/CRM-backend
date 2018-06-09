@@ -50,6 +50,23 @@ class Handler extends ExceptionHandler
     }
 
     /**
+     * Render an exception into an HTTP response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Exception  $exception
+     * @return \Illuminate\Http\Response
+     */
+    public function render($request, Exception $exception)
+    {
+        $status = $exception->getCode() ? $exception->getCode() : $exception->status;
+        $message = $exception->errors() ? $exception->errors() : $exception->getMessage().' '.$exception->getLine().' '.$exception->getFile();
+        if($this->getStatusCode() === 200) {
+            $this->setStatusCode($status);
+        }
+        return response()->json($message, $status);
+    }
+
+    /**
      * Convert an authentication exception into an unauthenticated response.
      *
      * @param  \Illuminate\Http\Request  $request

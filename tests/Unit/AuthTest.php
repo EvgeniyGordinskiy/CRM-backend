@@ -14,7 +14,7 @@ class AuthTest extends TestCase
     use WithoutMiddleware;
 
     /**
-     * A basic test example.
+     * Test authenticate with wrong email.
      *
      * @return void
      */
@@ -31,6 +31,22 @@ class AuthTest extends TestCase
             ->assertStatus(422)
             ->assertJson([
                 'email' =>  ["The email must be a valid email address."]
+            ]);
+    }
+
+    public function testAuthFailWithInvalidPassword()
+    {
+        $user = new User(['name' => 'test', 'email' => 'email@email.com']);
+        $playload = [
+            'email' => $user->email,
+            'password' => 'fg'
+        ];
+        $this
+            ->actingAs($user)
+            ->json('POST', '/api/' . self::API_V1 . '/auth', $playload)
+            ->assertStatus(422)
+            ->assertJson([
+                'password' =>  ["The password must be at least 3 characters."]
             ]);
     }
 }
