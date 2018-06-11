@@ -45,7 +45,6 @@ class AuthTest extends TestCase
             'password' => 'fg'
         ];
         $this
-            ->actingAs($user)
             ->json('POST', '/api/' . self::API_V1 . '/auth', $playload)
             ->assertStatus(422)
             ->assertJson([
@@ -64,7 +63,6 @@ class AuthTest extends TestCase
             'password' => ''
         ];
         $this
-            ->actingAs($user)
             ->json('POST', '/api/' . self::API_V1 . '/auth', $playload)
             ->assertStatus(422)
             ->assertJson([
@@ -83,11 +81,42 @@ class AuthTest extends TestCase
             'password' => 'ljll'
         ];
         $this
-            ->actingAs($user)
             ->json('POST', '/api/' . self::API_V1 . '/auth', $playload)
             ->assertStatus(422)
             ->assertJson([
                 'email' =>  ["The email field is required."]
             ]);
+    }
+
+    /**
+     *  Test authenticate successfully.
+     */
+    public function testAuthSuccessfully()
+    {
+        $testEmail = 'httpTest@httpTest.com';
+        $password = bcrypt('111111');
+        if( ! $user = User::whereEmail($testEmail)->first() ) {
+            $user = new User([
+                'name' => 'test',
+                'email' => $testEmail,
+                'password' => $password,
+                'first_name' => 'first_name',
+                'last_name' => 'last_name',
+                'token' => str_random(30),
+                'timeZone' => 'en',
+                ]);
+            $user->save();
+        }
+        $playload = [
+            'email' => $testEmail,
+            'password' => 111111
+        ];
+
+        $resp = (array) json_decode(
+            $this->json('POST', '/api/' . self::API_V1 . '/auth', $playload)->content()
+        );
+
+        if(array_key_exists('token', $resp)) $user->delete();
+        $this->assertArrayHasKey('token', $resp);
     }
 }
