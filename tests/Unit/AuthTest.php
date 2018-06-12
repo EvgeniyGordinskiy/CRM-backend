@@ -93,23 +93,13 @@ class AuthTest extends TestCase
      */
     public function testAuthSuccessfully()
     {
-        $testEmail = 'httpTest@httpTest.com';
-        $password = bcrypt('111111');
-        if( ! $user = User::whereEmail($testEmail)->first() ) {
-            $user = new User([
-                'name' => 'test',
-                'email' => $testEmail,
-                'password' => $password,
-                'first_name' => 'first_name',
-                'last_name' => 'last_name',
-                'token' => str_random(30),
-                'timeZone' => 'en',
-                ]);
+        if( ! $user = User::whereEmail($this->getDefaultEmail())->first() ) {
+            $user = new User($this->getUserData());
             $user->save();
         }
         $playload = [
-            'email' => $testEmail,
-            'password' => 111111
+            'email' => $this->getDefaultEmail(),
+            'password' => $this->getDefaultPassword()
         ];
 
         $resp = (array) json_decode(
@@ -118,5 +108,28 @@ class AuthTest extends TestCase
 
         if(array_key_exists('token', $resp)) $user->delete();
         $this->assertArrayHasKey('token', $resp);
+    }
+
+    private function getUserData()
+    {
+        return [
+            'name' => 'test',
+            'email' => $this->getDefaultEmail(),
+            'password' => $this->getDefaultPassword(),
+            'first_name' => 'first_name',
+            'last_name' => 'last_name',
+            'token' => str_random(30),
+            'timeZone' => 'en',
+        ];
+    }
+
+    private function getDefaultEmail() : string
+    {
+        return 'httpTest@httpTest.com';
+    }
+
+    private function getDefaultPassword() : string
+    {
+        return '111111';
     }
 }
