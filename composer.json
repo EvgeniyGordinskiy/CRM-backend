@@ -16,6 +16,7 @@
         "guzzlehttp/guzzle": "^6.2",
         "h4cc/wkhtmltopdf-amd64": "0.12.x",
         "laravel/framework": "5.5.*",
+        "laravel/socialite": "^3.0",
         "laravel/tinker": "~1.0",
         "league/csv": "^8.2",
         "league/flysystem-sftp": "^1.0",

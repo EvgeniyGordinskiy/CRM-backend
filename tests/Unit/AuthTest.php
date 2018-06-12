@@ -11,7 +11,10 @@ class AuthTest extends TestCase
 {
     use WithoutMiddleware;
 
-
+    /**
+     * Test register route.
+     * @throws \Exception
+     */
     public function testRegister()
     {
         $data = TestUser::getUserData();
@@ -127,5 +130,4 @@ class AuthTest extends TestCase
         if(array_key_exists('token', $resp)) $user->delete();
         $this->assertArrayHasKey('token', $resp);
     }
-
 }

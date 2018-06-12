@@ -21,6 +21,13 @@ Route::group([
     Route::post('reset_password', ['as' => 'resetPassword', 'uses' => 'AuthController@resetPassword']);
     Route::get('change_password/{token}', ['as' => 'changePassword', 'uses' => 'AuthController@changePassword']);
 });
+
+Route::group([
+    'prefix' => 'social/'
+], function(){
+    Route::get('{provider}', 'Auth\AuthSocialController@redirect');
+    Route::get('callback', 'Auth\AuthSocialController@handle');
+});
 //Route::get('/confirm/email/send', ['as' => 'email.send', 'uses' => 'EmailConfirmationController@send']);
 
 Route::group([
