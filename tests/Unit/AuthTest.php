@@ -13,6 +13,26 @@ class AuthTest extends TestCase
 {
     use WithoutMiddleware;
 
+
+    public function testRegister()
+    {
+        $data = $this->getUserData();
+        $data['password'] = $this->getDefaultPassword();
+        $data['password_confirmation'] = $this->getDefaultPassword();
+        $resp = (array) json_decode(
+            $this->json('POST', '/api/' . self::API_V1 . '/auth/register', $data )->content()
+        );
+
+        if(array_key_exists('token', $resp)) {
+            if( ! $user = User::whereEmail($this->getDefaultEmail())->first() ) {
+                throw new \Exception('Test user is not present');
+            }
+            $user->delete();
+        }
+
+        $this->assertArrayHasKey('token', $resp);
+    }
+
     /**
      * Test authenticate with wrong email.
      *
@@ -94,8 +114,12 @@ class AuthTest extends TestCase
     public function testAuthSuccessfully()
     {
         if( ! $user = User::whereEmail($this->getDefaultEmail())->first() ) {
-            $user = new User($this->getUserData());
+            $data = $this->getUserData();
+            $data['password'] = $this->getDefaultPassword(true);
+            $user = new User($data);
             $user->save();
+        } else {
+            throw new \Exception('Test user is present');
         }
         $playload = [
             'email' => $this->getDefaultEmail(),
@@ -115,7 +139,6 @@ class AuthTest extends TestCase
         return [
             'name' => 'test',
             'email' => $this->getDefaultEmail(),
-            'password' => $this->getDefaultPassword(),
             'first_name' => 'first_name',
             'last_name' => 'last_name',
             'token' => str_random(30),
@@ -128,8 +151,8 @@ class AuthTest extends TestCase
         return 'httpTest@httpTest.com';
     }
 
-    private function getDefaultPassword() : string
+    private function getDefaultPassword($crypt = false) : string
     {
-        return '111111';
+        return $crypt ? bcrypt('111111') : '111111';
     }
 }
