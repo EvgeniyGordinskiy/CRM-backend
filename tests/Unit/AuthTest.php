@@ -3,11 +3,9 @@
 namespace Tests\Unit;
 
 use App\Models\User;
+use Tests\TestUser;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthTest extends TestCase
 {
@@ -16,15 +14,15 @@ class AuthTest extends TestCase
 
     public function testRegister()
     {
-        $data = $this->getUserData();
-        $data['password'] = $this->getDefaultPassword();
-        $data['password_confirmation'] = $this->getDefaultPassword();
+        $data = TestUser::getUserData();
+        $data['password'] = TestUser::getDefaultPassword();
+        $data['password_confirmation'] = TestUser::getDefaultPassword();
         $resp = (array) json_decode(
             $this->json('POST', '/api/' . self::API_V1 . '/auth/register', $data )->content()
         );
 
         if(array_key_exists('token', $resp)) {
-            if( ! $user = User::whereEmail($this->getDefaultEmail())->first() ) {
+            if( ! $user = User::whereEmail(TestUser::getDefaultEmail())->first() ) {
                 throw new \Exception('Test user is not present');
             }
             $user->delete();
@@ -95,7 +93,6 @@ class AuthTest extends TestCase
      */
     public function testAuthFailRequiredEmail()
     {
-        $user = new User(['name' => 'test', 'email' => 'email@email.com']);
         $playload = [
             'email' => '',
             'password' => 'ljll'
@@ -113,17 +110,14 @@ class AuthTest extends TestCase
      */
     public function testAuthSuccessfully()
     {
-        if( ! $user = User::whereEmail($this->getDefaultEmail())->first() ) {
-            $data = $this->getUserData();
-            $data['password'] = $this->getDefaultPassword(true);
-            $user = new User($data);
-            $user->save();
+        if( ! $user = User::whereEmail(TestUser::getDefaultEmail())->first() ) {
+            $user = TestUser::create_user();
         } else {
             throw new \Exception('Test user is present');
         }
         $playload = [
-            'email' => $this->getDefaultEmail(),
-            'password' => $this->getDefaultPassword()
+            'email' => TestUser::getDefaultEmail(),
+            'password' => TestUser::getDefaultPassword()
         ];
 
         $resp = (array) json_decode(
@@ -134,25 +128,4 @@ class AuthTest extends TestCase
         $this->assertArrayHasKey('token', $resp);
     }
 
-    private function getUserData()
-    {
-        return [
-            'name' => 'test',
-            'email' => $this->getDefaultEmail(),
-            'first_name' => 'first_name',
-            'last_name' => 'last_name',
-            'token' => str_random(30),
-            'timeZone' => 'en',
-        ];
-    }
-
-    private function getDefaultEmail() : string
-    {
-        return 'httpTest@httpTest.com';
-    }
-
-    private function getDefaultPassword($crypt = false) : string
-    {
-        return $crypt ? bcrypt('111111') : '111111';
-    }
 }
