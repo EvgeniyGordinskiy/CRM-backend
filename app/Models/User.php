@@ -34,6 +34,14 @@ class User extends Authenticatable implements JWTSubject
     /**
      * @return mixed
      */
+    public function social()
+    {
+        return $this->hasMany(UsersAuthSocial::class);
+    }
+
+    /**
+     * @return mixed
+     */
     public function getJWTIdentifier()
     {
         return $this->getKey();  // Eloquent model method
