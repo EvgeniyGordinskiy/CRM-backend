@@ -51,17 +51,6 @@ Route::get('refresh_token', [
     'uses' => 'AuthController@refresh',
 ]);
 
-// Account Route
-Route::group([
-    'as' => 'account.',
-    'prefix' => 'account',
-    'middleware' => [
-        'jwt.auth'
-    ],
-], function () {
-    Route::get('', ['as' => 'show', 'uses' => 'Account\AccountController@show']);
-
-});
 
 //Authenticate routes
 Route::group(['middleware' => ['jwt.auth']], function () {
