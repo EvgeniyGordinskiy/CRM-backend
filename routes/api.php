@@ -54,6 +54,13 @@ Route::get('refresh_token', [
 
 //Authenticate routes
 Route::group(['middleware' => ['jwt.auth']], function () {
+    Route::group([
+        'as' => 'password.',
+        'prefix' => 'password',
+        ], function(){
+        Route::post('reset', ['as' => 'resetPassword', 'uses' => 'AuthController@resetPassword']);
+        Route::get('change', ['as' => 'changePassword', 'uses' => 'AuthController@changePassword']);
+    });
     // Clients
     Route::group([
         'as' => 'clients.',
