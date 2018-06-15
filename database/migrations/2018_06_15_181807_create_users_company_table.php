@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsersAuthSocialTable extends Migration
+class CreateUsersCompanyTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateUsersAuthSocialTable extends Migration
      */
     public function up()
     {
-        Schema::create('users_auth_social', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('users_company', function (Blueprint $table) {
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
-            $table->string('provider_name');
-            $table->integer('provider_id')->unsigned();
+            $table->integer('company_id')->unsigned();
+            $table->foreign('company_id')->references('id')->on('companies');
         });
     }
 
@@ -29,6 +28,6 @@ class CreateUsersAuthSocialTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users_auth_social');
+        Schema::dropIfExists('users_company');
     }
 }
