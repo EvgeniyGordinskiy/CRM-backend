@@ -7,6 +7,7 @@ class TestUser
 {
     public static function create_user($cryptPassword = true) : User
     {
+        if( $user = User::whereEmail(TestUser::getDefaultEmail())->first() ) return $user;
         $data = self::getUserData();
         $data['password'] = TestUser::getDefaultPassword($cryptPassword);
         $user = new User($data);

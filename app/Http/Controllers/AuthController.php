@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use App\Services\Auth\AuthService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\AuthenticateRequest;
-use Hash;
 
 class AuthController extends BaseController
 {
@@ -17,6 +13,7 @@ class AuthController extends BaseController
 	 * This action will be fired when the user tries to authenticate.
 	 *
 	 * @param AuthenticateRequest $request
+     * @param AuthService $authService
      * @uses
      *  POST auth/
      *              {
@@ -30,9 +27,9 @@ class AuthController extends BaseController
      *       token: $token
      *     }
 	 */
-    public function authenticate(AuthenticateRequest $request)
+    public function authenticate(AuthenticateRequest $request, AuthService $authService)
     {
-        $token = JWTAuth::attempt($this->getCredentials($request));
+        $token = $authService->authenticate($request);
 
         if (!$token) {
             return $this->respondUnauthorized('Invalid credentials', 40101);
@@ -44,6 +41,7 @@ class AuthController extends BaseController
      * The action to register a user.
      *
      * @param RegisterRequest $request The incoming request with data.
+     * @param AuthService $authService
      * @uses
      *  auth/register 
      *             {
@@ -61,41 +59,15 @@ class AuthController extends BaseController
      *       token: $token
      *     }
      */
-    public function register(RegisterRequest $request)
+    public function register(RegisterRequest $request,  AuthService $authService)
     {
-        $user = new User($request->only(
-            [
-                'first_name',
-                'last_name',
-                'timeZone',
-                'email',
-                'password',
-            ]
-        ));
-        $user->password = bcrypt($user->password);
 
-        $user->token = str_random(30);
+        $token = $authService->register($request);
 
-        $user->save();
-
-        $credentials = $request->only('email', 'password');
-
-        $token = JWTAuth::attempt($credentials);
+        if (!$token) {
+            return $this->respondUnauthorized('Error while registered user', 403);
+        }
 
         return $this->respond(compact('token'));
-    }
-
-    /**
-     * Return the credential that are mandatory.
-     *
-     * @param  AuthenticateRequest $request The request for authentication.
-     * @return array The credentials.
-     */
-    private function getCredentials(AuthenticateRequest $request)
-    {
-        return [
-            'email' => $request->input('email'),
-            'password' => $request->input('password'),
-        ];
     }
 }

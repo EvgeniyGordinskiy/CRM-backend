@@ -17,6 +17,7 @@ class AuthTest extends TestCase
      */
     public function testRegister()
     {
+        User::whereEmail(TestUser::getDefaultEmail())->delete();
         $data = TestUser::getUserData();
         $data['password'] = TestUser::getDefaultPassword();
         $data['password_confirmation'] = TestUser::getDefaultPassword();
@@ -113,11 +114,7 @@ class AuthTest extends TestCase
      */
     public function testAuthSuccessfully()
     {
-        if( ! $user = User::whereEmail(TestUser::getDefaultEmail())->first() ) {
-            $user = TestUser::create_user();
-        } else {
-            throw new \Exception('Test user is present');
-        }
+        $user = TestUser::create_user();
         $playload = [
             'email' => TestUser::getDefaultEmail(),
             'password' => TestUser::getDefaultPassword()
@@ -126,7 +123,6 @@ class AuthTest extends TestCase
         $resp = (array) json_decode(
             $this->json('POST', '/api/' . self::API_V1 . '/auth', $playload)->content()
         );
-
         if(array_key_exists('token', $resp)) $user->delete();
         $this->assertArrayHasKey('token', $resp);
     }
