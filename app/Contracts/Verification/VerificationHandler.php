@@ -9,7 +9,8 @@ interface VerificationHandler
     /**
      * Send verification message to the user
      * @param User $user
-     * @return mixed
+     * @param String $string
+     * @return boolean
      */
-    public function send(User $user);
+    public function send(User $user, String $string) : bool;
 }

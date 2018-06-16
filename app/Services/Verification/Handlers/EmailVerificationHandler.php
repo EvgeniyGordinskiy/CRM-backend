@@ -3,6 +3,7 @@
 namespace App\Services\Verification\Handlers;
 
 use App\Contracts\VerificationHandler;
+use App\Mail\EmailConfirmation;
 use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 
@@ -11,11 +12,12 @@ class EmailVerificationHandler implements VerificationHandler
 
     /**
      * Send verify email
-     * @param $user
-     * @return mixed
+     * @param User $user
+     * @param String $string
+     * @return boolean
      */
-    public function send(User $user)
+    public function send(User $user, String $string) : bool
     {
-        return Mail::send(new EmailConfirmation($user));
+        return Mail::send(new EmailConfirmation($user, $string));
     }
 }

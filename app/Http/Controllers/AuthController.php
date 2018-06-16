@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ResetPasswordRequest;
 use App\Services\Auth\AuthService;
+use App\Services\Verification\VerificationService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\AuthenticateRequest;
@@ -69,5 +71,15 @@ class AuthController extends BaseController
         }
 
         return $this->respond(compact('token'));
+    }
+
+    public function resetPassword(ResetPasswordRequest $request)
+    {
+        VerificationService::setPlayload(['new_password' => bcrypt($request->password)]);
+        $status = VerificationService::send();
+
+        if( $status === VerificationService::SUCCESSFULLY_SEND ) return $this->respondWithSuccess('Verification email is sent.');
+
+        return $this->respondWithError('Error while password changed.', 403);
     }
 }

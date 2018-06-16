@@ -4,8 +4,11 @@ namespace App\Services\Verification;
 
 use App\Contracts\VerificationHandler;
 use App\Models\User;
+use App\UsersVerification;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Request;
 
 class VerificationService
 {
@@ -31,12 +34,31 @@ class VerificationService
      * Class which called Verification Service
      * @var string
      */
-    private static $callingClass = '';
+    private static $calledClass = '';
 
-    public static function send(VerificationHandler $handler = null, User $user)
+    /**
+     * @var string
+     */
+    private static $playload = '';
+
+    /**
+     *  Statuses of the service
+     */
+    const SUCCESSFULLY_SEND = 1;
+    const ERROR_WHILE_SEND = 0;
+
+    public static function send(VerificationHandler $handler = null)
     {
+        $user = Request::user();
+        self::$calledClass = get_called_class();
         self::$currentHandler = $handler ?? new self::$defaultHandler();
-        self::$currentHandler->send($user);
+        $token = self::createToken();
+
+        if(self::saveNewVerification($token, $user) && self::$currentHandler->send($user, $token)) {
+            return self::SUCCESSFULLY_SEND;
+        }
+
+        return self::ERROR_WHILE_SEND;
     }
 
     /**
@@ -48,7 +70,7 @@ class VerificationService
     {
         if(
             !Cache::has($token)
-            || !EmailConfirmation::whereUserId(Cache::get($token))->first()
+            || !UsersVerification::whereUserId(Cache::get($token))->first()
         ){
             return redirect(env('APP_FRONT_URL').'/login');
         }else{
@@ -56,19 +78,37 @@ class VerificationService
         }
     }
 
+    public static function setPlayload( Array $playload)
+    {
+        self::$playload = json_encode($playload);
+    }
+
     /**
      * Create token
-     * @param $id
+     * @return string
      */
-    private static function createToken($id)
+    private static function createToken()
     {
         $token = sha1(time());
+        return $token;
+    }
+
+    /**
+     * @param String $token
+     * @param User $user
+     * @return bool
+     */
+    private static function saveNewVerification(String $token, User $user)
+    {
         $expiresAt = Carbon::now()
             ->addMinutes(self::$expiration_time);
-        Cache::put($token, $id, $expiresAt);
-        new \App\EmailConfirmation([
-            'user_id' => $id,
-            'token' => $token
-        ]);
+       return
+           Cache::put($token, $user->id, $expiresAt)
+           &&
+           new UsersVerification([
+               'user_id' => $user->id,
+               'token' => $token,
+               'class_name' => self::$calledClass
+           ]);
     }
 }
