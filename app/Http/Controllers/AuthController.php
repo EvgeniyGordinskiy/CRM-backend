@@ -8,6 +8,7 @@ use App\Services\Verification\VerificationService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\Auth\AuthenticateRequest;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends BaseController
 {
@@ -31,7 +32,7 @@ class AuthController extends BaseController
 	 */
     public function authenticate(AuthenticateRequest $request, AuthService $authService)
     {
-        $token = $authService->authenticate($request);
+        $token = $authService->authenticate($request->email, $request->password);
 
         if (!$token) {
             return $this->respondUnauthorized('Invalid credentials', 40101);
@@ -64,9 +65,9 @@ class AuthController extends BaseController
     public function register(RegisterRequest $request,  AuthService $authService)
     {
 
-        $token = $authService->register($request);
+        $token = $authService->register($request->first_name, $request->last_name, $request->timeZone, $request->email, $request->password);
 
-        if (!$token) {
+        if ( !$token ) {
             return $this->respondUnauthorized('Error while registered user', 403);
         }
 
@@ -76,7 +77,7 @@ class AuthController extends BaseController
     public function resetPassword(ResetPasswordRequest $request)
     {
         VerificationService::setPlayload(['new_password' => bcrypt($request->password)]);
-        $status = VerificationService::send();
+        $status = VerificationService::send(Auth::user());
 
         if( $status === VerificationService::SUCCESSFULLY_SEND ) return $this->respondWithSuccess('Verification email is sent.');
 

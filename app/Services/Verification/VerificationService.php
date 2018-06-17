@@ -47,9 +47,8 @@ class VerificationService
     const SUCCESSFULLY_SEND = 1;
     const ERROR_WHILE_SEND = 0;
 
-    public static function send(VerificationHandler $handler = null)
+    public static function send(VerificationHandler $handler = null, $user)
     {
-        $user = Request::user();
         self::$calledClass = get_called_class();
         self::$currentHandler = $handler ?? new self::$defaultHandler();
         $token = self::createToken();

@@ -57,9 +57,9 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if( $exception instanceof \ErrorException || $exception instanceof \ReflectionException ) return parent::render($request, $exception);
-        $status = $exception->getCode() ? $exception->getCode() : $exception->status;
-        $message = $exception->errors() ? $exception->errors() : $exception->getMessage().' '.$exception->getLine().' '.$exception->getFile();
+        if($exception instanceof \ReflectionException ) return parent::render($request, $exception);
+        $status = $exception->getCode() ? $exception->getCode() : $exception->status ?? 500;
+        $message = method_exists($exception, 'errors' ) ? $exception->errors() : $exception->getMessage().' '.$exception->getLine().' '.$exception->getFile();
         if($this->getStatusCode() === 200) {
             $this->setStatusCode($status);
         }

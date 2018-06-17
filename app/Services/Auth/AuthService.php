@@ -15,55 +15,44 @@ class AuthService
      * @param AuthenticateRequest $request
      * @return mixed
      */
-    public function authenticate(AuthenticateRequest $request)
+    public function authenticate($email, $password)
     {
-       $token = JWTAuth::attempt($this->getCredentials($request));
+       $token = JWTAuth::attempt(['email' => $email, 'password' => $password]);
 
        return $token;
     }
 
     /**
      * Register user
-     * @param RegisterRequest $request
+     * @param $firstName
+     * @param $lastName
+     * @param $timeZone
+     * @param $email
+     * @param $password
      * @return mixed
      */
-    public function register(RegisterRequest $request)
+    public function register($firstName, $lastName, $timeZone, $email, $password)
     {
-        $user = new User($request->only(
+        $user = new User(
             [
-                'first_name',
-                'last_name',
-                'timeZone',
-                'email',
-                'password',
+                'first_name' => $firstName,
+                'last_name'  => $lastName,
+                'timeZone'   => $timeZone,
+                'email'      => $email,
+                'password'   => $password,
             ]
-        ));
+        );
         $user->password = bcrypt($user->password);
 
         $user->token = str_random(30);
 
         $user->save();
 
-        $credentials = $request->only('email', 'password');
+        $credentials = ['email' => $email, 'password' => $password];
 
         $token = JWTAuth::attempt($credentials);
 
         return $token;
     }
-
-    /**
-     * Return the credential that are mandatory.
-     *
-     * @param  AuthenticateRequest $request The request for authentication.
-     * @return array The credentials.
-     */
-    private function getCredentials(AuthenticateRequest $request)
-    {
-        return [
-            'email' => $request->input('email'),
-            'password' => $request->input('password'),
-        ];
-    }
-
 
 }
