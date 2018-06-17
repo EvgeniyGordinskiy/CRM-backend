@@ -32,7 +32,7 @@ class EmailConfirmation extends Mailable
      */
     public function build()
     {
-        $url = route('confirm.email.confirm', ['token' => $this->token]);
+        $url = route('password.change', ['token' => $this->token]);
         return $this
             ->to($this->user->email)
             ->markdown('emails.confirmation')

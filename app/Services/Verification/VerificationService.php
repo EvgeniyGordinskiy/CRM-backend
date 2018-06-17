@@ -47,7 +47,7 @@ class VerificationService
     const SUCCESSFULLY_SEND = 1;
     const ERROR_WHILE_SEND = 0;
 
-    public static function send(VerificationHandler $handler = null, $user)
+    public static function send($user, VerificationHandler $handler = null)
     {
         self::$calledClass = get_called_class();
         self::$currentHandler = $handler ?? new self::$defaultHandler();
@@ -101,13 +101,14 @@ class VerificationService
     {
         $expiresAt = Carbon::now()
             ->addMinutes(self::$expiration_time);
-       return
-           Cache::put($token, $user->id, $expiresAt)
-           &&
-           new UsersVerification([
-               'user_id' => $user->id,
-               'token' => $token,
-               'class_name' => self::$calledClass
-           ]);
+        Cache::put($token, $user->id, $expiresAt);
+        UsersVerification::whereUserId($user->id)->whereClassName(self::$calledClass)->delete();
+        $verification = new UsersVerification([
+            'user_id'    => $user->id,
+            'token'      => $token,
+            'class_name' => self::$calledClass,
+            'playload'   => self::$playload,
+        ]);
+       return (boolean) $verification->save();
     }
 }

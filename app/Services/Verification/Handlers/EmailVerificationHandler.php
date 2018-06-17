@@ -18,6 +18,7 @@ class EmailVerificationHandler implements VerificationHandler
      */
     public function send(User $user, String $string) : bool
     {
-        return Mail::send(new EmailConfirmation($user, $string));
+        Mail::send(new EmailConfirmation($user, $string));
+        return (boolean) !Mail::failures();
     }
 }

@@ -8,6 +8,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\Debug\Exception\FatalErrorException;
 
 class Handler extends ExceptionHandler
 {
@@ -57,13 +58,13 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if($exception instanceof \ReflectionException ) return parent::render($request, $exception);
+        if( $exception instanceof FatalErrorException) return parent::render($request, $exception);
         $status = $exception->getCode() ? $exception->getCode() : $exception->status ?? 500;
         $message = method_exists($exception, 'errors' ) ? $exception->errors() : $exception->getMessage().' '.$exception->getLine().' '.$exception->getFile();
         if($this->getStatusCode() === 200) {
             $this->setStatusCode($status);
         }
-        return response()->json($message, $status);
+        return $this->respondWithError($message, $status);
     }
 
     /**

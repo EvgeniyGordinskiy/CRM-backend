@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\VerifyJWTToken;
 use Illuminate\Http\Request;
 
 /*
@@ -36,8 +37,8 @@ Route::group(['middleware' => ['jwt.auth']], function () {
         'as' => 'password.',
         'prefix' => 'password',
         ], function(){
-        Route::post('reset', ['as' => 'resetPassword', 'uses' => 'AuthController@resetPassword']);
-        Route::get('change', ['as' => 'changePassword', 'uses' => 'AuthController@changePassword']);
+        Route::post('reset', ['as' => 'reset', 'uses' => 'AuthController@resetPassword'])->middleware(VerifyJWTToken::class);
+        Route::get('change', ['as' => 'change', 'uses' => 'AuthController@changePassword']);
     });
     // Clients
     Route::group([

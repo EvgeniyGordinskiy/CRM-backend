@@ -6,9 +6,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\LengthAwarePaginator as Paginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response as IlluminateResponse;
-use Illuminate\Database\Eloquent\Collection;
-use Response;
-use Request;
+use Illuminate\Support\Facades\Response;
 
 trait Restable
 {
