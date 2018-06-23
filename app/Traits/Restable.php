@@ -194,7 +194,7 @@ trait Restable
      * @return JsonResponse The JSON-response with the error message.
      */
     public function respondWithError(
-        string $message,
+        $message,
         int $code,
         array $headers = []
     ): JsonResponse

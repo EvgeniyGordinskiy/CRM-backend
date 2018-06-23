@@ -77,7 +77,7 @@ class AuthController extends BaseController
     public function resetPassword(ResetPasswordRequest $request)
     {
         VerificationService::setPlayload(['new_password' => bcrypt($request->password)]);
-        $status = VerificationService::send(Auth::user());
+        $status = VerificationService::send(auth()->user());
 
         if( $status === VerificationService::SUCCESSFULLY_SEND ) return $this->respondWithSuccess('Verification email is sent.');
 
