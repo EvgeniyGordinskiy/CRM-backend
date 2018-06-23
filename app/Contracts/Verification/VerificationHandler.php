@@ -10,7 +10,6 @@ interface VerificationHandler
      * Send verification message to the user
      * @param User $user
      * @param String $string
-     * @return boolean
      */
-    public function send(User $user, String $string) : bool;
+    public function send(User $user, String $string) ;
 }

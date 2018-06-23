@@ -17,7 +17,7 @@ class EmailVerificationHandler implements VerificationHandler
      * @param String $string
      * @return boolean
      */
-    public function send(User $user, String $string) : bool
+    public function send(User $user, String $string)
     {
         return dispatch(new SendVerificationEmail($user, $string));
     }
