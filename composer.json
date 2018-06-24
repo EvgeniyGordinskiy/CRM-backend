@@ -20,6 +20,7 @@
         "laravel/tinker": "~1.0",
         "league/csv": "^8.2",
         "league/flysystem-sftp": "^1.0",
+        "predis/predis": "^1.1",
         "twilio/sdk": "4.12.0",
         "tymon/jwt-auth": "1.0.0.0-RC2",
         "vinkla/hashids": "^3.1"
