@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ClientResource;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use App\Http\Requests\Client\DestroyRequest;
@@ -17,21 +18,19 @@ class ClientController extends BaseController
      *
      * @param IndexRequest $request The incoming request.
      *
-     * @return JsonResponse The paginated clients in a JSON response.
+     * @return ClientResource The paginated clients in a JSON response.
      */
     public function index(Request $request)
     {
         $clients =  new Client();
-
         if(!$request->has('limit')){
-            return $this->respondWithData($clients::all()->toArray());
+            return ClientResource::collection(Client::all());
         }
-        
+
         $this->setPagination($request->get('limit'));
         $pagination = $clients->paginate($this->getPagination());
-        $clients = $pagination->items();
 
-        return $this->respondWithPagination($pagination, $clients);
+        return ClientResource::collection($pagination);
     }
 
     /**

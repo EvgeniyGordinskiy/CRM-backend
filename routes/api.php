@@ -17,11 +17,11 @@ use Illuminate\Http\Request;
 Route::group([
     'prefix' => 'auth'
 ], function(){
-    Route::post('', ['as' => '', 'uses' => 'AuthController@authenticate']);
-    Route::post('register', ['as' => 'register', 'uses' => 'AuthController@register']);
-    Route::post('reset_password', ['as' => 'resetPassword', 'uses' => 'AuthController@resetPassword']);
-    Route::get('change_password/{token}', ['as' => 'changePassword', 'uses' => 'AuthController@changePassword']);
-    Route::get('refresh_token', ['as' => 'auth.refresh', 'uses' => 'AuthController@refresh']);
+    Route::post('', ['as' => '', 'uses' => 'Auth\AuthController@authenticate']);
+    Route::post('register', ['as' => 'register', 'uses' => 'Auth\AuthController@register']);
+    Route::post('reset_password', ['as' => 'resetPassword', 'uses' => 'Auth\AuthController@resetPassword']);
+    Route::get('change_password/{token}', ['as' => 'changePassword', 'uses' => 'Auth\AuthController@changePassword']);
+    Route::get('refresh_token', ['as' => 'auth.refresh', 'uses' => 'Auth\AuthController@refresh']);
 });
 
 Route::group([
