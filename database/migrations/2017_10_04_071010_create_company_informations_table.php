@@ -17,7 +17,9 @@ class CreateCompanyInformationsTable extends Migration
            $table->increments('id');
            $table->string('description');
            $table->integer('company_type_id')->unsigned()->nullable();
-           $table->foreign('company_type_id')->references('id')->on('type_companies')->onDelete('set null');
+           $table->foreign('company_type_id')->references('id')->on('company_types')->onDelete('set null');
+           $table->integer('company_id')->unsigned()->nullable();
+           $table->foreign('company_id')->references('id')->on('companies')->onDelete('set null');
            $table->timestamps();
         });
     }

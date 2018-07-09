@@ -17,8 +17,8 @@ class DatabaseSeeder extends Seeder
         ['name' => 'discount'],
     ];
 
-    // TypeOrganisation
-    private $typesOrganisation = [
+    // companyTypes
+    private $companyTypes = [
                 ['name' => 'sell'],
                 ['name' => 'realtor'],
                 ['name' => 'call'],
@@ -52,14 +52,14 @@ class DatabaseSeeder extends Seeder
         factory(App\Models\User::class, 5)->create();
         factory(App\Models\City::class, 5)->create();
         factory(App\Models\Country::class, 5)->create();
-        factory(App\Models\Organisation::class, 5)->create();
+        factory(App\Models\Company::class, 5)->create();
         factory(App\Models\Client::class, 5)->create();
         factory(App\Models\Product::class, 5)->create();
         factory(App\Models\Email::class, 5)->create();
         factory(App\Models\Phone::class, 5)->create();
         
         DB::table('permissions')->insert($this->permissions);
-        DB::table('type_organisations')->insert($this->typesOrganisation);
+        DB::table('company_types')->insert($this->companyTypes);
         DB::table('roles')->insert($this->roles);
         
         foreach ($this->discounts as $discount){
@@ -72,7 +72,7 @@ class DatabaseSeeder extends Seeder
         
         // ===== With foreign key =====   
         
-        factory(App\Models\OrganisationInformation::class, 5)->create();
+        factory(App\Models\CompanyInformation::class, 5)->create();
         factory(App\Models\ClientAdress::class, 5)->create();
         factory(App\Models\ClientEmail::class, 5)->create();
         factory(App\Models\ClientPhone::class, 5)->create();

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TypeOrganisation extends Model
+class CompanyInformation extends Model
 {
     //
 }

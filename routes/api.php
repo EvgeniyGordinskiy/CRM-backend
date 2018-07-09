@@ -37,8 +37,8 @@ Route::group(['middleware' => ['jwt.auth']], function () {
         'as' => 'password.',
         'prefix' => 'password',
         ], function(){
-        Route::post('reset', ['as' => 'reset', 'uses' => 'AuthController@resetPassword'])->middleware(VerifyJWTToken::class);
-        Route::get('change', ['as' => 'change', 'uses' => 'AuthController@changePassword']);
+        Route::post('reset', ['as' => 'reset', 'uses' => 'Auth\AuthController@resetPassword'])->middleware(VerifyJWTToken::class);
+        Route::get('change', ['as' => 'change', 'uses' => 'Auth\AuthController@changePassword']);
     });
     // Clients
     Route::group([

@@ -49,10 +49,11 @@ $factory->define(App\Models\Country::class, function (Faker\Generator $faker) {
     ];
 });
 
-// Organisation
-$factory->define(App\Models\Organisation::class, function (Faker\Generator $faker) {
+// Company
+$factory->define(App\Models\Company::class, function (Faker\Generator $faker) {
     return [
-      'name' => $faker->word
+      'name' => $faker->word,
+      'url' => $faker->url
     ];
 });
 
@@ -94,11 +95,12 @@ $factory->define(App\Models\Email::class, function (Faker\Generator $faker) {
 // =========== With foreign key ==============
 
 
-// OrganisationInformation
-$factory->define(App\Models\OrganisationInformation::class, function (Faker\Generator $faker) {
+// CompanyInformation
+$factory->define(App\Models\CompanyInformation::class, function (Faker\Generator $faker) {
     return [
       'description' => $faker->text(100),
-      'organisation_type_id' => getReferenceId('TypeOrganisation')
+      'company_type_id' => getReferenceId('CompanyType'),
+      'company_id' => getReferenceId('Company')
     ];
 });
 
